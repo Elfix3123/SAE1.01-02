@@ -83,7 +83,7 @@ public class Classification {
 
 
 			// try {
-			// 	FileWriter file = new FileWriter("fichier-sortie.txt");
+			// 	FileWriter file = new FileWriter(nomFichier);
 			// 	file.write(sommeReussite.get(i).getChaine() + ":" + sommeReussite.get(i).getEntier() + "%\n");
 			// } catch (IOException e) {
 			// 	e.printStackTrace();
@@ -94,7 +94,7 @@ public class Classification {
 		System.out.println(texteFichier);
 		
 		// file.close();
-		// System.out.println("le résultat été retranscrit avec succès dans fichier-sortie.txt");
+		// System.out.println("le résultat été retranscrit avec succès dans " + nomFichier);
 		
 	}
 
