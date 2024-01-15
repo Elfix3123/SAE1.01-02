@@ -80,21 +80,21 @@ public class Classification {
 		while (i < sommeReussite.size()) {
 			texteFichier += sommeReussite.get(i).getChaine() + ":" + sommeReussite.get(i).getEntier() + "%\n";
 			i++;
-
-
-			// try {
-			// 	FileWriter file = new FileWriter(nomFichier);
-			// 	file.write(sommeReussite.get(i).getChaine() + ":" + sommeReussite.get(i).getEntier() + "%\n");
-			// } catch (IOException e) {
-			// 	e.printStackTrace();
-			// }
-			
 		}
 
-		System.out.println(texteFichier);
 		
-		// file.close();
-		// System.out.println("le résultat été retranscrit avec succès dans " + nomFichier);
+		System.out.println(texteFichier);
+		try {
+			FileWriter file = new FileWriter(nomFichier);
+			file.write(texteFichier);
+			file.close();
+			System.out.println("le résultat été retranscrit avec succès dans " + nomFichier);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
+		
 		
 	}
 
