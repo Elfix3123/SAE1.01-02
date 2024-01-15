@@ -47,7 +47,7 @@ public class UtilitairePaireChaineEntier {
 
 		// Parcours complet (recherche du maximum)
 		// Invariant de boucle : entierMax est le maximum des attributs entier des PairesChaineEntier de listePaires[0..i-1]
-		while (i < 0) {
+		while (i < listePaires.size()) {
 			if (listePaires.get(i).getEntier() > entierMax) {
 				entierMax = listePaires.get(i).getEntier();
 				strMax = listePaires.get(i).getChaine();

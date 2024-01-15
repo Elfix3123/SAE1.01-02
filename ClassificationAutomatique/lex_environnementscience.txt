@@ -8,4 +8,3 @@ spatial:2
 test:2
 étude:2
 études:1
-

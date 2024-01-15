@@ -92,10 +92,6 @@ public class Classification {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		
-		
-		
 	}
 
 
