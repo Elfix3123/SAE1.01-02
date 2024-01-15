@@ -1,0 +1,11 @@
+sarkozy:3
+politique:3
+etat:3
+maire:3
+president:3
+municipale:2
+mairie:2
+gauche:2
+droite:2
+francais:1
+loi:1

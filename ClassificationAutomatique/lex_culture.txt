@@ -1,0 +1,16 @@
+artiste:2
+musique:3
+musiciens:3
+musicien:3
+culture:3
+culturel:3
+culturels:3
+spectacle:2
+oeuvre:1
+français:1
+scène:2
+salon:2
+histoire:2
+découvrir:1
+art:3
+théatre:2

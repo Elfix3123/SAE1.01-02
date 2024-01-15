@@ -1,0 +1,11 @@
+environnement:3
+science:3
+médicament:2
+médicament:2
+physique:2
+chimie:2
+spatial:2
+test:2
+étude:2
+études:1
+
