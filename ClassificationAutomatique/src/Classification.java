@@ -145,6 +145,6 @@ public class Classification {
 		sports.initLexique("ClassificationAutomatique/lex_sports.txt");
 		listeCategories.add(sports);
 
-		classementDepeches(depeches, listeCategories, null);
+		classementDepeches(depeches, listeCategories, "./ClassificationAutomatique/fichier_resultats.txt");
 	}
 }
