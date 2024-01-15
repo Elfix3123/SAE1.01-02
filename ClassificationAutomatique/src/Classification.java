@@ -66,12 +66,39 @@ public class Classification {
         //Chargement des dépêches en mémoire
         System.out.println("chargement des dépêches");
         ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
+        
+        // Création d'un vecteur de catégories
+        ArrayList<Categorie> listeCategories = new ArrayList<>();
+
+        // Ajout des catégories dans le vécteur
+        Categorie culture = new Categorie("culture");
+        culture.initLexique("ClassificationAutomatique/lex_culture.txt");
+        listeCategories.add(culture);
+
+        Categorie economie = new Categorie("economie");
+        economie.initLexique("ClassificationAutomatique/lex_economie.txt");
+        listeCategories.add(economie);
+
+        Categorie environnementscience = new Categorie("environnementscience");
+        environnementscience.initLexique("ClassificationAutomatique/lex_environnementscience.txt");
+        listeCategories.add(environnementscience);
+
+        Categorie politique = new Categorie("politique");
+        politique.initLexique("ClassificationAutomatique/lex_politique.txt");
+        listeCategories.add(politique);
+
         Categorie sports = new Categorie("sports");
         sports.initLexique("ClassificationAutomatique/lex_sports.txt");
+        listeCategories.add(sports);
 
-        for (int i = 0; i < depeches.size(); i++) {
-            depeches.get(i).afficher();
-            System.out.println("Score 'sports' de la dépèche : " + sports.score(depeches.get(i)));
-        }
+        Depeche depecheEtudiee = depeches.get(0);
+        depecheEtudiee.afficher();
+
+        ArrayList<PaireChaineEntier> scoresDepecheEtudiee = new ArrayList<>();
+        scoresDepecheEtudiee.add(new PaireChaineEntier("culture", culture.score(depecheEtudiee)));
+        scoresDepecheEtudiee.add(new PaireChaineEntier("economie", economie.score(depecheEtudiee)));
+        scoresDepecheEtudiee.add(new PaireChaineEntier("environnementscience", environnementscience.score(depecheEtudiee)));
+        scoresDepecheEtudiee.add(new PaireChaineEntier("politique", politique.score(depecheEtudiee)));
+        scoresDepecheEtudiee.add(new PaireChaineEntier("sports", sports.score(depecheEtudiee)));
     }
 }

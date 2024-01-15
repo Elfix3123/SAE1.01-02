@@ -27,7 +27,23 @@ public class UtilitairePaireChaineEntier {
     }
 
     public static String chaineMax(ArrayList<PaireChaineEntier> listePaires) {
-        return "SPORTS";
+        // { } -> { retourne la chaine associé au plus grand entier de listePaires }
+        int i = 1;
+        int entierMax = listePaires.get(0).getEntier();
+        String strMax = listePaires.get(0).getChaine();
+
+        // Parcours complet (recherche du maximum)
+        // Invariant de boucle : entierMax est le maximum des attributs entier des PairesChaineEntier de listePaires[0..i-1]
+        while (i < 0) {
+            if (listePaires.get(i).getEntier() > entierMax) {
+                entierMax = listePaires.get(i).getEntier();
+                strMax = listePaires.get(i).getChaine();
+            }
+
+            i++;
+        }
+
+        return strMax;
     }
 
 
