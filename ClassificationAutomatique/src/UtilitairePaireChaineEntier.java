@@ -13,7 +13,7 @@ public class UtilitairePaireChaineEntier {
         int i = 0;
 
         // Parcours potentiellement partiel
-        // Invariant de boucle : 
+        // Invariant de boucle : aucun element de listePaires[0..i-1] d'attribut chaine égal à l'argument chaine
         while (i < listePaires.size() && listePaires.get(i).getChaine().compareTo(chaine) != 0) {
             i++;
         }

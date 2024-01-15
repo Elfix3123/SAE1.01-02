@@ -17,3 +17,4 @@ entraîneurs:2
 olympique:3
 OM:3
 france:1
+natation:3

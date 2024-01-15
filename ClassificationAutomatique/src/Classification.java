@@ -63,17 +63,15 @@ public class Classification {
     }
 
     public static void main(String[] args) {
-
         //Chargement des dépêches en mémoire
         System.out.println("chargement des dépêches");
-        ArrayList<Depeche> depeches = lectureDepeches("./depeches.txt");
+        ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
+        Categorie sports = new Categorie("sports");
+        sports.initLexique("ClassificationAutomatique/lex_sports.txt");
 
         for (int i = 0; i < depeches.size(); i++) {
             depeches.get(i).afficher();
+            System.out.println("Score 'sports' de la dépèche : " + sports.score(depeches.get(i)));
         }
-
     }
-
-
 }
-

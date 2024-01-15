@@ -46,20 +46,15 @@ public class Categorie {
 
     //calcul du score d'une dépêche pour la catégorie
     public int score(Depeche d) {
-        // {} ==> 
-        //{entier correspondant au score de la dépeche donnée pour cette catégorie}
+        // { } ==> 
+        // {entier correspondant au score de la dépeche donnée pour cette catégorie}
  
         int res = 0;
 
-        //for (int i = 0; i < d.getMots().size(); i++){
-        //    res += UtilitairePaireChaineEntier.entierPourChaine(d.getMots().get(i));
-        //}
+        for (int i = 0; i < d.getMots().size(); i++){
+            res += UtilitairePaireChaineEntier.entierPourChaine(this.getLexique(), d.getMots().get(i));
+        }
 
         return res;
-    }
-
-    public static void main(String[] args) {
-        Categorie leTest = new Categorie("test");
-        leTest.initLexique("ClassificationAutomatique/lex_sports.txt");
     }
 }
