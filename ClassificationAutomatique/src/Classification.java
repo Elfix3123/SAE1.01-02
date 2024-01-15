@@ -82,18 +82,19 @@ public class Classification {
 			i++;
 
 
-			try {
-				FileWriter file = new FileWriter("fichier-sortie.txt");
-				file.write(sommeReussite.get(i).getChaine() + ":" + sommeReussite.get(i).getEntier() + "%\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// try {
+			// 	FileWriter file = new FileWriter("fichier-sortie.txt");
+			// 	file.write(sommeReussite.get(i).getChaine() + ":" + sommeReussite.get(i).getEntier() + "%\n");
+			// } catch (IOException e) {
+			// 	e.printStackTrace();
+			// }
 			
 		}
 
 		System.out.println(texteFichier);
-		file.close();
-		System.out.println("le résultat été retranscrit avec succès dans fichier-sortie.txt");
+		
+		// file.close();
+		// System.out.println("le résultat été retranscrit avec succès dans fichier-sortie.txt");
 		
 	}
 
