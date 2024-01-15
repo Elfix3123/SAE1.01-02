@@ -14,4 +14,10 @@ public class PaireChaineEntier {
 		this.chaine = chaine;
 		this.entier = entier;
 	}
+
+	@Override
+	public String toString() {
+		// pour l'affichage de l'instance courante de la classe
+		return "(" + this.chaine + ", " + this.entier + ")";
+	}
 }
