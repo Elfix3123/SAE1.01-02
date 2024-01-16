@@ -211,7 +211,7 @@ public class Classification {
 
 		//Chargement des dépêches en mémoire
 		System.out.println("chargement des dépêches");
-		ArrayList<Depeche> depeches = lectureDepeches("./depeches.txt");
+		ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
 		
 		// Création d'un vecteur de catégories
 		ArrayList<Categorie> listeCategories = new ArrayList<>();
