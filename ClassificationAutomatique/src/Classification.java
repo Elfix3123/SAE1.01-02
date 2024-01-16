@@ -47,11 +47,13 @@ public class Classification {
 		// pourcentages correspondants }
 		int i = 0;
 		int j;
+		int compteur = 0;
 		String texteFichier = "";
 		ArrayList<PaireChaineEntier> scoresDepecheEtudiee;
 		String chaineMaxDepecheEtudiee;
 		ArrayList<PaireChaineEntier> sommeReussite = new ArrayList<>();
 		int totalReussite = 0;
+		PaireResultatCompteur<Integer> resultat;
 		
 		// Création d'un vecteur sommeReussite, qui associe chaque Categorie de categories à 0
 		while (i < categories.size()) {
@@ -66,7 +68,9 @@ public class Classification {
 			j = 0;
 
 			while (j < categories.size()) {		// Calcul du score de la Depeche dans chaque catégorie
-				scoresDepecheEtudiee.add(new PaireChaineEntier(categories.get(j).getNom(), categories.get(j).score(depeches.get(i))));
+				resultat = categories.get(j).score(depeches.get(i));
+				scoresDepecheEtudiee.add(new PaireChaineEntier(categories.get(j).getNom(), resultat.getRes()));
+				compteur += resultat.getCompteur();
 				j++;
 			}
 
@@ -89,7 +93,7 @@ public class Classification {
 		}
 
 		texteFichier += "MOYENNE:" + (((float)totalReussite)/sommeReussite.size()) + "%\n";
-		System.out.println(texteFichier);
+		System.out.println("Compteur de score : " + compteur);
 
 		try {	// Ecriture du fichier
 			FileWriter file = new FileWriter(nomFichier);
@@ -136,6 +140,7 @@ public class Classification {
 		int j;
 		int increment;
 		int indiceMotCourant;
+		int compteur = 0;
 
 		// Parcours complet du vecteur des dépêches
 		while(i < depeches.size()){
@@ -154,6 +159,7 @@ public class Classification {
 
 					dictionnaire.set(indiceMotCourant, new PaireChaineEntier(dictionnaire.get(indiceMotCourant).getChaine(), // On le met à jour avec le score approprié
 					dictionnaire.get(indiceMotCourant).getEntier() + increment));
+					compteur++;
 				}
 
 				j++;
@@ -161,6 +167,8 @@ public class Classification {
 
 			i++;
 		}
+
+		System.out.println("Compteur de calculScore : " + compteur);
 	}
 
 	public static int poidsPourScore(int score) {
@@ -200,6 +208,8 @@ public class Classification {
 	}
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+
 		//Chargement des dépêches en mémoire
 		System.out.println("chargement des dépêches");
 		ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
@@ -235,5 +245,8 @@ public class Classification {
 		// Calcul des résultats avec chaque dépêche de test
 		depeches = lectureDepeches("./ClassificationAutomatique/test.txt");
 		classementDepeches(depeches, listeCategories, "./ClassificationAutomatique/fichier_resultats.txt");
+	
+		long endTime = System.currentTimeMillis();
+		System.out.println("Calculs réalisés en : " + (endTime-startTime) + "ms");
 	}
 }
