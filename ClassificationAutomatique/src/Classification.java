@@ -102,17 +102,22 @@ public class Classification {
 		int i = 0;
 		int j;
 
+		// Parcours complet du vecteur des dépêches
 		while (i < depeches.size()){
-			if(depeches.get(i).getCategorie().compareToIgnoreCase(categorie) == 0){
+			if(depeches.get(i).getCategorie().compareTo(categorie) == 0){	// On vérifie si la dépêche courante est de la bonne catégorie
 				j = 0;
-				while (j < depeches.get(i).getMots().size()){
-					if (! resultat.contains(depeches.get(i).getMots().get(j))){
+
+				while (j < depeches.get(i).getMots().size()){	// On parcours chaque mot de la dépèche
+					if (UtilitairePaireChaineEntier.indicePourChaine(resultat, depeches.get(i).getMots().get(j)) == -1) {	// Si le mot n'est pas déjà dans le vécteur on l'ajoute
 						resultat.add(new PaireChaineEntier(depeches.get(i).getMots().get(j), 0));
 					}
+
+					j++;
 				}
 			}
-		}
 
+			i++;
+		}
 		return resultat;
 	}
 
@@ -121,20 +126,33 @@ public class Classification {
 		// - décrémenté si la dépêche n'est pas dans la catégorie categorie et
 		// - incrémenté si la dépêche est dans la catégorie categorie
 		int i = 0;
-		int j, k;
+		int j;
+		int increment;
+		int indiceMotCourant;
+
+		// Parcours complet du vecteur des dépêches
 		while(i < depeches.size()){
-			if (depeches.get(i).getCategorie().compareToIgnoreCase(categorie) == 0){
-				j = 0;
-				while (j < depeches.get(i).getMots().size()){
-					k = 0;
-					while(k < dictionnaire.size() || dictionnaire.get(k).getChaine().compareToIgnoreCase(depeches.get(i).getMots().get(j)) == 0)
-					if (k == dictionnaire.size()){
-						dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getEntier() - 1));
-					}else{
-						dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getEntier() + 1));
+			j = 0;
+
+			while (j < depeches.get(i).getMots().size()){	// On parcours chaque mot de la dépêche
+				indiceMotCourant = UtilitairePaireChaineEntier.indicePourChaine(dictionnaire, depeches.get(i).getMots().get(j));
+				
+				if (indiceMotCourant != -1) {
+					if (depeches.get(i).getCategorie().compareTo(categorie) == 0) {
+						increment = 1;
 					}
+					else {
+						increment = -1;
+					}
+
+					dictionnaire.set(indiceMotCourant, new PaireChaineEntier(dictionnaire.get(indiceMotCourant).getChaine(), 
+					dictionnaire.get(indiceMotCourant).getEntier() + increment));
 				}
+
+				j++;
 			}
+
+			i++;
 		}
 	}
 
@@ -176,5 +194,9 @@ public class Classification {
 		listeCategories.add(sports);
 
 		classementDepeches(depeches, listeCategories, "./ClassificationAutomatique/fichier_resultats.txt");
+
+		ArrayList<PaireChaineEntier> dico = initDico(depeches, "CULTURE");
+		calculScores(depeches, "CULTURE", dico);
+		System.out.println(dico);
 	}
 }

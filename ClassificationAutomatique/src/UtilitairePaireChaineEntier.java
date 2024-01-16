@@ -14,7 +14,7 @@ public class UtilitairePaireChaineEntier {
 		}
 
 		if (i == listePaires.size()) {
-			return 0;
+			return -1;
 		}
 		else {
 			return i;
