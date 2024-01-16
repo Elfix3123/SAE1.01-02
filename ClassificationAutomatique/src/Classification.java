@@ -136,8 +136,8 @@ public class Classification {
 
 			while (j < depeches.get(i).getMots().size()){	// On parcours chaque mot de la dépêche
 				indiceMotCourant = UtilitairePaireChaineEntier.indicePourChaine(dictionnaire, depeches.get(i).getMots().get(j));
-				
-				if (indiceMotCourant != -1) {
+
+				if (indiceMotCourant != -1) {	// On vérifie si le mot courant est dans le dictionnaire
 					if (depeches.get(i).getCategorie().compareTo(categorie) == 0) {
 						increment = 1;
 					}
@@ -145,7 +145,7 @@ public class Classification {
 						increment = -1;
 					}
 
-					dictionnaire.set(indiceMotCourant, new PaireChaineEntier(dictionnaire.get(indiceMotCourant).getChaine(), 
+					dictionnaire.set(indiceMotCourant, new PaireChaineEntier(dictionnaire.get(indiceMotCourant).getChaine(), // On le met à jour avec le score approprié
 					dictionnaire.get(indiceMotCourant).getEntier() + increment));
 				}
 
@@ -157,7 +157,15 @@ public class Classification {
 	}
 
 	public static int poidsPourScore(int score) {
-		return 0;
+		if (score > 0) {
+			return 3;
+		}
+		else if (score > -5) {
+			return 2;
+		}
+		else {
+			return 1;
+		}
 	}
 
 	public static void generationLexique(ArrayList<Depeche> depeches, String categorie, String nomFichier) {
