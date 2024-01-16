@@ -46,8 +46,8 @@ public class Classification {
 		// écrit dans le fichier de nom nomFichier, le nom de la catégorie ayant le plus grand score ainsi que les
 		// pourcentages correspondants }
 		int i = 0;
-		int j;
 		int compteur = 0;
+		int j;
 		String texteFichier = "";
 		ArrayList<PaireChaineEntier> scoresDepecheEtudiee;
 		String chaineMaxDepecheEtudiee;
@@ -152,8 +152,7 @@ public class Classification {
 				if (indiceMotCourant != -1) {	// On vérifie si le mot courant est dans le dictionnaire
 					if (depeches.get(i).getCategorie().compareTo(categorie) == 0) {
 						increment = 1;
-					}
-					else {
+					} else {
 						increment = -1;
 					}
 
@@ -212,7 +211,7 @@ public class Classification {
 
 		//Chargement des dépêches en mémoire
 		System.out.println("chargement des dépêches");
-		ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
+		ArrayList<Depeche> depeches = lectureDepeches("./depeches.txt");
 		
 		// Création d'un vecteur de catégories
 		ArrayList<Categorie> listeCategories = new ArrayList<>();
