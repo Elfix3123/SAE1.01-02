@@ -94,14 +94,48 @@ public class Classification {
 		}
 	}
 
-
 	public static ArrayList<PaireChaineEntier> initDico(ArrayList<Depeche> depeches, String categorie) {
+		// retourne une ArrayList<PaireChaineEntier> contenant tous les mots présents dans au moins une dépêche de la catégorie categorie.
+		// scores initialisés à 0 dans un premier temps
 		ArrayList<PaireChaineEntier> resultat = new ArrayList<>();
-		return resultat;
 
+		int i = 0;
+		int j;
+
+		while (i < depeches.size()){
+			if(depeches.get(i).getCategorie().compareToIgnoreCase(categorie) == 0){
+				j = 0;
+				while (j < depeches.get(i).getMots().size()){
+					if (! resultat.contains(depeches.get(i).getMots().get(j))){
+						resultat.add(new PaireChaineEntier(depeches.get(i).getMots().get(j), 0));
+					}
+				}
+			}
+		}
+
+		return resultat;
 	}
 
 	public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
+		// met à jour les scores des mots présents dans dictionnaire. Lorsqu'un mot présent dans dictionnaire apparaît dans une dépêche de depeches, son score est :
+		// - décrémenté si la dépêche n'est pas dans la catégorie categorie et
+		// - incrémenté si la dépêche est dans la catégorie categorie
+		int i = 0;
+		int j, k;
+		while(i < depeches.size()){
+			if (depeches.get(i).getCategorie().compareToIgnoreCase(categorie) == 0){
+				j = 0;
+				while (j < depeches.get(i).getMots().size()){
+					k = 0;
+					while(k < dictionnaire.size() || dictionnaire.get(k).getChaine().compareToIgnoreCase(depeches.get(i).getMots().get(j)) == 0)
+					if (k == dictionnaire.size()){
+						dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getEntier() - 1));
+					}else{
+						dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getEntier() + 1));
+					}
+				}
+			}
+		}
 	}
 
 	public static int poidsPourScore(int score) {
