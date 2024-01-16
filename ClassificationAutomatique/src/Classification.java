@@ -46,11 +46,13 @@ public class Classification {
 		// écrit dans le fichier de nom nomFichier, le nom de la catégorie ayant le plus grand score ainsi que les
 		// pourcentages correspondants }
 		int i = 0;
+		int compteur = 0;
 		int j;
 		String texteFichier = "";
 		ArrayList<PaireChaineEntier> scoresDepecheEtudiee;
 		String chaineMaxDepecheEtudiee;
 		ArrayList<PaireChaineEntier> sommeReussite = new ArrayList<>();
+		PaireResultatCompteur<Integer> resultat;
 		
 		while (i < categories.size()) {
 			sommeReussite.add(new PaireChaineEntier(categories.get(i).getNom(), 0));
@@ -62,7 +64,10 @@ public class Classification {
 			scoresDepecheEtudiee = new ArrayList<>();
 			j = 0;
 			while (j < categories.size()) {
-				scoresDepecheEtudiee.add(new PaireChaineEntier(categories.get(j).getNom(), categories.get(j).score(depeches.get(i))));
+				resultat = categories.get(j).score(depeches.get(i));
+				scoresDepecheEtudiee.add(new PaireChaineEntier(categories.get(j).getNom(), resultat.getRes()));
+				compteur += resultat.getCompteur();
+
 				j++;
 			}
 			chaineMaxDepecheEtudiee = UtilitairePaireChaineEntier.chaineMax(scoresDepecheEtudiee);
@@ -82,7 +87,8 @@ public class Classification {
 			i++;
 		}
 
-		
+		System.out.println("compteur score : " + compteur);
+
 		System.out.println(texteFichier);
 		try {
 			FileWriter file = new FileWriter(nomFichier);
@@ -129,6 +135,8 @@ public class Classification {
 		int j;
 		int increment;
 		int indiceMotCourant;
+		int compteur = 0;
+
 
 		// Parcours complet du vecteur des dépêches
 		while(i < depeches.size()){
@@ -140,13 +148,14 @@ public class Classification {
 				if (indiceMotCourant != -1) {	// On vérifie si le mot courant est dans le dictionnaire
 					if (depeches.get(i).getCategorie().compareTo(categorie) == 0) {
 						increment = 1;
-					}
-					else {
+					} else {
 						increment = -1;
 					}
 
 					dictionnaire.set(indiceMotCourant, new PaireChaineEntier(dictionnaire.get(indiceMotCourant).getChaine(), // On le met à jour avec le score approprié
 					dictionnaire.get(indiceMotCourant).getEntier() + increment));
+
+					compteur ++;
 				}
 
 				j++;
@@ -154,6 +163,11 @@ public class Classification {
 
 			i++;
 		}
+
+
+
+
+		System.out.println("compteur calculscore : " + compteur);
 	}
 
 	public static int poidsPourScore(int score) {
@@ -173,38 +187,47 @@ public class Classification {
 	}
 
 	public static void main(String[] args) {
+		//debut du timer
+		long startTime = System.currentTimeMillis();
+
+
 		//Chargement des dépêches en mémoire
 		System.out.println("chargement des dépêches");
-		ArrayList<Depeche> depeches = lectureDepeches("./ClassificationAutomatique/depeches.txt");
+		ArrayList<Depeche> depeches = lectureDepeches("./depeches.txt");
 		
 		// Création d'un vecteur de catégories
 		ArrayList<Categorie> listeCategories = new ArrayList<>();
 
 		// Ajout des catégories dans le vécteur
 		Categorie culture = new Categorie("CULTURE");
-		culture.initLexique("ClassificationAutomatique/lex_culture.txt");
+		culture.initLexique("./lex_culture.txt");
 		listeCategories.add(culture);
 
 		Categorie economie = new Categorie("ECONOMIE");
-		economie.initLexique("ClassificationAutomatique/lex_economie.txt");
+		economie.initLexique("./lex_economie.txt");
 		listeCategories.add(economie);
 
 		Categorie environnementscience = new Categorie("ENVIRONNEMENT-SCIENCES");
-		environnementscience.initLexique("ClassificationAutomatique/lex_environnementscience.txt");
+		environnementscience.initLexique("./lex_environnementscience.txt");
 		listeCategories.add(environnementscience);
 
 		Categorie politique = new Categorie("POLITIQUE");
-		politique.initLexique("ClassificationAutomatique/lex_politique.txt");
+		politique.initLexique("./lex_politique.txt");
 		listeCategories.add(politique);
 
 		Categorie sports = new Categorie("SPORTS");
-		sports.initLexique("ClassificationAutomatique/lex_sports.txt");
+		sports.initLexique("./lex_sports.txt");
 		listeCategories.add(sports);
 
-		classementDepeches(depeches, listeCategories, "./ClassificationAutomatique/fichier_resultats.txt");
+		classementDepeches(depeches, listeCategories, "./fichier_resultats.txt");
 
 		ArrayList<PaireChaineEntier> dico = initDico(depeches, "CULTURE");
 		calculScores(depeches, "CULTURE", dico);
 		System.out.println(dico);
+
+		//fin du timer
+		long endTime = System.currentTimeMillis();
+		System.out.println("calculs réalisés en : " + (endTime-startTime) + "ms");
+
 	}
 }
