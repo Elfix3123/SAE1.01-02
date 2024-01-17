@@ -174,7 +174,6 @@ public class Classification {
 
 			i++;
 		}
-
 		System.out.println("Compteur de calculScore : " + compteur);
 	}
 
@@ -242,7 +241,7 @@ public class Classification {
 
 		// Initialisation des catégories
 		int i = 0;
-
+		
 		while (i < listeCategories.size()) {
 			generationLexique(depeches, listeCategories.get(i).getNom(), "./ClassificationAutomatique/lex_" + listeCategories.get(i).getNom() + ".txt");	// Création d'un lexique pour chaque catégorie
 			listeCategories.get(i).initLexique("./ClassificationAutomatique/lex_" + listeCategories.get(i).getNom() + ".txt");	// Initialisation de chaque catégorie avec le lexique créé
