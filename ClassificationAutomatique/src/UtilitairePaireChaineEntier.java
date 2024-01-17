@@ -1,7 +1,36 @@
 import java.util.ArrayList;
 
 public class UtilitairePaireChaineEntier {
+	public static int indiceDicho(ArrayList<PaireChaineEntier> listePaires, String chaine) {
+		// { listePaires trié sur la chaine } -> { si chaine est dans listePaires l'indice de sa première occurence,
+		// sinon moins l'indice moins un qu'il aurait du avoir }
+		if(listePaires.size() <= 0 || chaine.compareTo(listePaires.get(listePaires.size()-1).getChaine()) > 0){
+			return -listePaires.size()-1;
+		}
+		else{
+			int inf = 0;
+			int sup = listePaires.size()-1;
+			int m;
 
+			while(inf < sup){
+				m = (inf+sup)/2;
+
+				if(chaine.compareTo(listePaires.get(m).getChaine()) <= 0){
+					sup = m;
+				}
+				else{
+					inf = m+1;
+				}
+			}
+			
+			if (chaine.compareTo(listePaires.get(inf).getChaine()) == 0) {
+				return inf;
+			}
+			else {
+				return -inf-1;
+			}
+		}
+	}
 
 	public static int indicePourChaine(ArrayList<PaireChaineEntier> listePaires, String chaine) {
 		// { } -> { retourne l’indice de chaine dans listePaires si chaine est présente et -1 sinon }
@@ -74,5 +103,4 @@ public class UtilitairePaireChaineEntier {
 
 		return ((float)somme)/listePaires.size();
 	}
-
 }

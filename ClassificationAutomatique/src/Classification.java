@@ -112,6 +112,7 @@ public class Classification {
 
 		int i = 0;
 		int j;
+		int indiceChaine;
 
 		// Parcours complet du vecteur des dépêches
 		while (i < depeches.size()){
@@ -119,10 +120,16 @@ public class Classification {
 				j = 0;
 
 				while (j < depeches.get(i).getMots().size()){	// On parcours chaque mot de la dépèche
-					if (UtilitairePaireChaineEntier.indicePourChaine(resultat, depeches.get(i).getMots().get(j)) == -1) {	// Si le mot n'est pas déjà dans le vécteur on l'ajoute
+					/* 
+					if (UtilitairePaireChaineEntier.indicePourChaine(resultat, depeches.get(i).getMots().get(j)) == -1) {	// Version non dichotomique
 						resultat.add(new PaireChaineEntier(depeches.get(i).getMots().get(j), 0));
 					}
+					*/
+					indiceChaine = UtilitairePaireChaineEntier.indiceDicho(resultat, depeches.get(i).getMots().get(j));
 
+					if (indiceChaine < 0) {	// Si le mot n'est pas déjà dans le vécteur on l'ajoute
+						resultat.add(-indiceChaine-1, new PaireChaineEntier(depeches.get(i).getMots().get(j), 0));
+					}
 					j++;
 				}
 			}
@@ -147,9 +154,10 @@ public class Classification {
 			j = 0;
 
 			while (j < depeches.get(i).getMots().size()){	// On parcours chaque mot de la dépêche
-				indiceMotCourant = UtilitairePaireChaineEntier.indicePourChaine(dictionnaire, depeches.get(i).getMots().get(j));
+				// indiceMotCourant = UtilitairePaireChaineEntier.indicePourChaine(dictionnaire, depeches.get(i).getMots().get(j));	// Version non dichotomique
+				indiceMotCourant = UtilitairePaireChaineEntier.indiceDicho(dictionnaire, depeches.get(i).getMots().get(j));
 
-				if (indiceMotCourant != -1) {	// On vérifie si le mot courant est dans le dictionnaire
+				if (indiceMotCourant >= 0) {	// On vérifie si le mot courant est dans le dictionnaire
 					if (depeches.get(i).getCategorie().compareTo(categorie) == 0) {
 						increment = 1;
 					} else {
