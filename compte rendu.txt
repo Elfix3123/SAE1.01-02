@@ -4,7 +4,7 @@ Felix & Kenzo
 
 
 
-Intro : 
+##Intro : 
 
 The objective of this project is to sort telegrams from a "test" database (text file) into five different categories (sciences & environement / culture / economy / pilotics / sports), depending on the words that constitute them, using a java program.
 
@@ -14,7 +14,7 @@ For each telegram, one score for each category will be saved, and the highest on
 
 
 
-Summary : 
+##Summary : 
 
 (all the programs we coded are available in the src/ file)
 
@@ -28,7 +28,7 @@ score > 0 : 3
 score > -5 : 2
 else : 1
 
-Despite this, the result was still not good enough : we still had accuracies of 60~70%. Therefore we adjusted the criterion required scores for each "weight" : 
+Despite this, the result was still not good enough : we still had accuracies of 50~60%. Therefore we adjusted the criterion required scores for each "weight" : 
 
 score > 2 : 3
 score > -4 : 2
@@ -37,13 +37,14 @@ else : 1
 We managed to get more than 75% accuracy. We considered that this is good enough.
 
 
-Results : 
+
+##Results : 
 
 With manually written lexicons, we obtained an average of 50% accuracy.
 With automatised lexicons, we obtained an average of 75% accuracy, which is better, but still not perfect. Some telegrams may be detected in the wrong category.
 
 
-Complexity : 
+##Complexity : 
 
 Here are the number of comparisons for the two score functions that we are using, with sequential algorithms : 
 
@@ -59,7 +60,7 @@ The number of comparisons is the same for the two versions :
 
 	
 	
-Conclusion : 
+##Conclusion : 
 
 In order to upgrade this program, there are some points we could improve to save even more execution time.
 First : the word detection : currently, the program checks the whole words each time, but instead of that it could only check the prefix of the word ("gymnast", "gymnasium", and "gymnastics" have the same prefix "gym". Instead of comparing the whole word to the whole lexicon file, we could imediately detect that it starts with "gym", and deduce that the word has good odds of belonging to the sports lexicon).
