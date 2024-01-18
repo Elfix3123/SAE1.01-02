@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class RssReader {
 
 
-    private static ArrayList<Depeche> lectureRss(String nomFichier) {
+    public static ArrayList<Depeche> lectureRss(String nomFichier) {
 		//creation d'un tableau de dépêches
 		ArrayList<Depeche> rss = new ArrayList<>();
 		try {
@@ -21,7 +21,7 @@ public class RssReader {
 
 			
 			int i = 0;
-			int j, k, l;
+			int j, k;
 			int depCourante = 0;
 			String date = null;
 			String categorie = null;
