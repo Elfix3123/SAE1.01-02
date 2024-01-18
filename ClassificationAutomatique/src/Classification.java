@@ -1,7 +1,6 @@
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -231,13 +230,11 @@ public class Classification {
 
 		ArrayList<String> texte = new ArrayList<>(depeche.getMots());
 		UtilitairePaireChaineEntier.triFusion(texte, 0, texte.size()-1);
-		System.out.println(texte);
 
 		int i = 0, j = 0;
 
 		// Invariant : aucun mot de motsVides[0..j-1] dans texte[0..i-1]
 		while (i < texte.size() & j < motsVides.size()) {
-			System.out.println(texte.get(i) + "  " + motsVides.get(j));
 			if (texte.get(i).compareTo(motsVides.get(j)) == 0) {		// On vérifie si le mot est un mot vide
 				texte.remove(i);
 			}
@@ -274,59 +271,30 @@ public class Classification {
 		return total;
 	}
 
-	public static ArrayList<PaireChaineEntier> kPlusProchesVoisinsDepeche (ArrayList<Depeche> depechesAprentissage, Depeche depeche, int k) {
-		/// { } -> { vecteur des couples majoritaires des catégories et de leurs scores respectifs des dépêches de depecheAprentissage
-		// les plus proches de depeche }
+	public static ArrayList<PaireChaineEntier> kPlusProchesVoisinsDepeche (ArrayList<PaireChaineVecteur<String>> depechesAprentissageTrie, Depeche depeche, int k) {
+		// { depecheAprentissageTrie contient des vecteurs triés } -> { vecteur des couples majoritaires des catégories et de leurs scores 
+		//	respectifs des dépêches de depecheAprentissage plus proches de depeche }
 		int scoreCourant;
 		int indiceCourant;
 		ArrayList<PaireChaineEntier> kPlusProchesVoisins = new ArrayList<>();
 		int i = 0;
 
-		while (i < depechesAprentissage.size()) {		// On compare chaque dépêche de depechesSource à celles de depechesAprentissage
-			scoreCourant = compareTextes(depechesAprentissage.get(i).getMots(), depeche.getMots());
+		while (i < depechesAprentissageTrie.size()) {		// On compare chaque dépêche de depechesSource à celles de depechesAprentissage
+			scoreCourant = compareTextes(depechesAprentissageTrie.get(i).getVecteur(), triMotsDepeche(depeche));
 			indiceCourant = UtilitairePaireChaineEntier.indiceDichoEntier(kPlusProchesVoisins, scoreCourant);
-			if (indiceCourant < 0) {
-				indiceCourant = -indiceCourant-1;
-			}
+	
 			if (indiceCourant <= k) {
-				kPlusProchesVoisins.add(indiceCourant, new PaireChaineEntier(depechesAprentissage.get(i).getCategorie(), scoreCourant));
+				kPlusProchesVoisins.add(indiceCourant, new PaireChaineEntier(depechesAprentissageTrie.get(i).getChaine(), scoreCourant));
+			}
+
+			if (kPlusProchesVoisins.size() > k) {
+				kPlusProchesVoisins.remove(kPlusProchesVoisins.size()-1);
 			}
 
 			i++;
 		}
 
 		return kPlusProchesVoisins;
-	}
-
-	public static String depecheMajoritaire (ArrayList<PaireChaineEntier> kPlusProchesVoisins) {
-		// { } -> { catégorie de kPlusProchesVoisins majoritaire }
-		ArrayList<PaireChaineEntier> nombreCategories = new ArrayList<>();
-		int i = 0;
-		int indice;
-
-		while (i < kPlusProchesVoisins.size()) {
-			indice = UtilitairePaireChaineEntier.indicePourChaine(nombreCategories, kPlusProchesVoisins.get(i).getChaine());
-			if (indice == -1) {		// Si la catégorie n'a pas encore été rencontrée on l'ajoute avec un nombre d'apparitions de 1
-				nombreCategories.add(new PaireChaineEntier(kPlusProchesVoisins.get(i).getChaine(), 1));
-			}
-			else {		// Sinon on la met à jour
-				nombreCategories.set(indice, new PaireChaineEntier(kPlusProchesVoisins.get(i).getChaine(), nombreCategories.get(indice).getEntier()+1));
-			}
-
-			i++;
-		}
-
-		i = 1;
-		PaireChaineEntier max = nombreCategories.get(0);
-		while (i < nombreCategories.size()) {	// Recherce séquentielle du maximum
-			if (max.getEntier() < nombreCategories.get(i).getEntier()) {
-				max = nombreCategories.get(i);
-			}
-
-			i++;
-		}
-
-		return max.getChaine();
 	}
 
 	public static void classementDepechesKNN (ArrayList<Depeche> depechesAprentissage, ArrayList<Depeche> depechesSource, int k, String nomFichier) {
@@ -336,18 +304,24 @@ public class Classification {
 		int i = 0;
 		String texteFichier = "";
 		ArrayList<PaireChaineEntier> sommeReussite = new ArrayList<>();
-		ArrayList<PaireChaineEntier> kPlusProchesVoisins = new ArrayList<>();
+		ArrayList<PaireChaineVecteur<String>> depechesAprentissageTrie = new ArrayList<>();
 		String categorieCourante;
 
 		int totalReussite = 0;
+		// On trie les mots de toutes les dépêches de depechesAprentissage
+		while (i < depechesAprentissage.size()) {
+			depechesAprentissageTrie.add(new PaireChaineVecteur<>(depechesAprentissage.get(i).getCategorie(), triMotsDepeche(depechesAprentissage.get(i))));
+			i++;
+		}
 
 		// Parcours de toutes les Depeche de depechesSource
+		i = 0;
 		while (i < depechesSource.size()) {
 			if (UtilitairePaireChaineEntier.indicePourChaine(sommeReussite, depechesSource.get(i).getCategorie()) == -1) {		// Ajout de la catégorie courante à sommeReussite si elle n'y est pas deja
 				sommeReussite.add(new PaireChaineEntier(depechesSource.get(i).getCategorie(), 0));
 			}
 
-			categorieCourante = depecheMajoritaire(kPlusProchesVoisinsDepeche(depechesAprentissage, depechesSource.get(i), k));
+			categorieCourante = kPlusProchesVoisinsDepeche(depechesAprentissageTrie, depechesSource.get(i), k).get(0).getChaine();
 			texteFichier += depechesSource.get(i).getId() + ":" + categorieCourante + "\n";
 
 			if (categorieCourante.compareTo(depechesSource.get(i).getCategorie()) == 0) {	// Vérification du résultat et mise à jour de sommeReussite
@@ -355,6 +329,8 @@ public class Classification {
 				new PaireChaineEntier(categorieCourante, sommeReussite.get(UtilitairePaireChaineEntier.indicePourChaine(sommeReussite, categorieCourante)).getEntier() + 1) );
 			}
 
+			System.out.println(categorieCourante + "   " + depechesSource.get(i).getCategorie());
+			
 			i++;
 		}
 		i = 0;
@@ -365,6 +341,8 @@ public class Classification {
 			i++;
 		}
 
+		texteFichier += "MOYENNE:" + (((float)totalReussite)/sommeReussite.size()) + "%\n";
+
 		try {	// Ecriture du fichier
 			FileWriter file = new FileWriter(nomFichier);
 			file.write(texteFichier);
@@ -374,7 +352,7 @@ public class Classification {
 			e.printStackTrace();
 		}
 	}
-	/*
+
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
 
@@ -417,12 +395,18 @@ public class Classification {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Calculs réalisés en : " + (endTime-startTime) + "ms");
 	}
-	 */
-
+	/*
 	public static void main(String[] args) {
+		
+		long startTime = System.currentTimeMillis();
+
 		System.out.println("chargement des dépêches");
 		ArrayList<Depeche> depechesAprentissage = lectureDepeches("./ClassificationAutomatique/depeches.txt");
 		ArrayList<Depeche> depechesSource = lectureDepeches("./ClassificationAutomatique/test.txt");
-		classementDepechesKNN(depechesAprentissage, depechesSource, 5, "./ClassificationAutomatique/fichier_resultats_knn.txt");
+		classementDepechesKNN(depechesAprentissage, depechesSource, 10, "./ClassificationAutomatique/fichier_resultats_knn.txt");
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("Calculs réalisés en : " + (endTime-startTime) + "ms");
 	}
+	*/
 }

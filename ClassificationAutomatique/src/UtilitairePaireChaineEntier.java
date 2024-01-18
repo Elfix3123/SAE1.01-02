@@ -33,10 +33,9 @@ public class UtilitairePaireChaineEntier {
 	}
 
 	public static int indiceDichoEntier(ArrayList<PaireChaineEntier> listePaires, int entier) {
-		// { listePaires trié sur l'entier } -> { si entier est dans listePaires l'indice de sa première occurence,
-		// sinon moins l'indice moins un qu'iwl aurait du avoir }
-		if(listePaires.size() <= 0 || entier > listePaires.get(listePaires.size()-1).getEntier()){
-			return -listePaires.size()-1;
+		// { listePaires trié sur l'entier décroissant } -> { indice ou inserer entier dans listePaires pour conserver le tri }
+		if(listePaires.size() == 0 || entier < listePaires.get(listePaires.size()-1).getEntier()){
+			return listePaires.size();
 		}
 		else{
 			int inf = 0;
@@ -46,7 +45,7 @@ public class UtilitairePaireChaineEntier {
 			while(inf < sup){
 				m = (inf+sup)/2;
 
-				if(entier <= listePaires.get(m).getEntier()){
+				if(entier >= listePaires.get(m).getEntier()){
 					sup = m;
 				}
 				else{
@@ -54,12 +53,7 @@ public class UtilitairePaireChaineEntier {
 				}
 			}
 			
-			if (entier == listePaires.get(inf).getEntier()) {
-				return inf;
-			}
-			else {
-				return -inf-1;
-			}
+			return inf;
 		}
 	}
 
